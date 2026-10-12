@@ -47,39 +47,39 @@
   .wrap { width: min(100% - 40px, var(--max)); margin-inline: auto; }
   .wrap-wide { width: min(100% - 32px, 1200px); margin-inline: auto; }
 
-  /* ===== Liquid glass cards ===== */
-  .glass {
+  /* ===== Spotlight glass cards (mouse-follow glow like ConsultTitans) ===== */
+  .glass,
+  .gaps-card {
+    --spot-x: 50%;
+    --spot-y: 30%;
     position: relative;
     isolation: isolate;
     background:
-      linear-gradient(145deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,.02) 40%, rgba(255,255,255,.04) 100%),
-      rgba(14, 14, 16, .55);
-    backdrop-filter: blur(22px) saturate(1.35);
-    -webkit-backdrop-filter: blur(22px) saturate(1.35);
+      linear-gradient(145deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.02) 45%, rgba(255,255,255,.04) 100%),
+      rgba(12, 12, 14, .72);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
     border: 1px solid rgba(255,255,255,.1);
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.14),
-      inset 0 -1px 0 rgba(255,255,255,.03),
-      0 20px 50px rgba(0,0,0,.35);
+      inset 0 1px 0 rgba(255,255,255,.12),
+      0 18px 44px rgba(0,0,0,.35);
     transition:
-      transform .4s cubic-bezier(.22,1,.36,1),
+      transform .35s cubic-bezier(.22,1,.36,1),
       border-color .35s ease,
-      box-shadow .4s ease,
-      background .35s ease;
+      box-shadow .35s ease;
   }
-  .glass::before {
+  .glass::before,
+  .gaps-card::after {
     content: "";
     position: absolute;
-    inset: -1px;
+    inset: 0;
     border-radius: inherit;
-    padding: 1.5px;
-    background: linear-gradient(
-      135deg,
-      rgba(255,255,255,.55) 0%,
-      rgba(0,151,238,.15) 28%,
-      rgba(255,255,255,.05) 50%,
-      rgba(0,151,238,.25) 72%,
-      rgba(255,255,255,.4) 100%
+    padding: 1px;
+    background: radial-gradient(
+      420px circle at var(--spot-x) var(--spot-y),
+      rgba(255,255,255,.65),
+      rgba(255,255,255,.12) 28%,
+      transparent 52%
     );
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
@@ -89,64 +89,43 @@
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    opacity: .35;
+    opacity: 0;
     pointer-events: none;
-    z-index: 2;
-    transition: opacity .4s ease, filter .4s ease;
+    z-index: 4;
+    transition: opacity .35s ease;
   }
   .glass::after {
     content: "";
     position: absolute;
-    inset: -2px;
+    inset: 0;
     border-radius: inherit;
-    background: transparent;
-    box-shadow: 0 0 0 0 transparent;
+    background: radial-gradient(
+      380px circle at var(--spot-x) var(--spot-y),
+      rgba(255,255,255,.12),
+      rgba(255,255,255,.03) 32%,
+      transparent 58%
+    );
     opacity: 0;
     pointer-events: none;
-    z-index: 0;
-    transition: opacity .4s ease, box-shadow .45s ease;
+    z-index: 1;
+    transition: opacity .35s ease;
   }
-  .glass:hover {
-    transform: translateY(-5px);
-    border-color: rgba(255,255,255,.22);
-    background:
-      linear-gradient(145deg, rgba(255,255,255,.1) 0%, rgba(0,151,238,.06) 45%, rgba(255,255,255,.05) 100%),
-      rgba(18, 20, 24, .62);
+  .glass:hover,
+  .gaps-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,.18);
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.22),
-      inset 0 -1px 0 rgba(255,255,255,.04),
-      0 28px 60px rgba(0,0,0,.45),
-      0 0 0 1px rgba(0,151,238,.25),
-      0 0 28px rgba(0,151,238,.28),
-      0 0 56px rgba(0,151,238,.12);
+      inset 0 1px 0 rgba(255,255,255,.18),
+      0 26px 56px rgba(0,0,0,.45),
+      0 0 40px rgba(255,255,255,.04);
   }
-  .glass:hover::before {
+  .glass:hover::before,
+  .glass:hover::after,
+  .gaps-card:hover::after {
     opacity: 1;
-    filter: brightness(1.25);
-    background: linear-gradient(
-      120deg,
-      rgba(255,255,255,.9) 0%,
-      rgba(0,151,238,.85) 25%,
-      rgba(255,255,255,.15) 48%,
-      rgba(0,200,255,.75) 72%,
-      rgba(255,255,255,.85) 100%
-    );
-    background-size: 200% 200%;
-    animation: glassShine 2.2s ease infinite;
-  }
-  .glass:hover::after {
-    opacity: 1;
-    box-shadow:
-      0 0 0 1px rgba(0,151,238,.45),
-      0 0 22px rgba(0,151,238,.4),
-      0 0 48px rgba(0,151,238,.22);
-  }
-  @keyframes glassShine {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
   }
   .glass > * { position: relative; z-index: 3; }
+  /* gaps-card already has ::before for grid — keep spotlight on ::after */
 
   /* ===== Buttons ===== */
   .btn {
@@ -492,9 +471,6 @@
     min-height: 340px;
     display: flex; flex-direction: column;
   }
-  .problem-card:hover {
-    overflow: visible;
-  }
   .problem-card:hover .problem-visual {
     border-radius: var(--radius) var(--radius) 0 0;
     overflow: hidden;
@@ -574,38 +550,103 @@
   .service-card h3 { font-size: 1.35rem; font-weight: 700; margin-bottom: 10px; }
   .service-card p { color: var(--muted); font-size: 14px; line-height: 1.55; }
 
-  /* ===== GAPS ===== */
+  /* ===== GAPS (matches ConsultTitans two-column card) ===== */
   .gaps {
     padding: 40px 0 100px;
   }
-  .gaps-media {
-    border-radius: var(--radius);
+  .gaps-card {
+    display: flex;
+    align-items: stretch;
+    gap: 48px;
+    padding: 24px;
+    border-radius: 32px;
+    border: 1px solid rgba(255,255,255,.08);
+    background:
+      radial-gradient(ellipse 70% 60% at 88% 8%, rgba(255,255,255,.10), transparent 55%),
+      linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     overflow: hidden;
-    border: 1px solid var(--line);
-    margin-bottom: 40px;
-    aspect-ratio: 21 / 9;
   }
-  .gaps-media img { width: 100%; height: 100%; object-fit: cover; }
-  .gaps-content { max-width: 640px; }
+  .gaps-card::before {
+    content: "";
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    padding: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse at 80% 20%, #000 10%, transparent 70%);
+    mask-image: radial-gradient(ellipse at 80% 20%, #000 10%, transparent 70%);
+    -webkit-mask: none;
+    mask: none;
+    opacity: 1;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .gaps-card::after {
+    /* spotlight rim — inherits mouse vars from shared rule */
+    z-index: 5;
+  }
+  .gaps-media {
+    position: relative; z-index: 1;
+    flex: 1 1 46%;
+    max-width: 560px;
+    border-radius: 24px;
+    overflow: hidden;
+    min-height: 560px;
+    align-self: stretch;
+  }
+  .gaps-media img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 1s cubic-bezier(.22,1,.36,1);
+  }
+  .gaps-card:hover .gaps-media img { transform: scale(1.06); }
+  .gaps-content {
+    position: relative; z-index: 1;
+    flex: 1 1 48%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    max-width: 560px;
+    padding: 32px 20px 32px 0;
+  }
+  .gaps-content .pill-badge { margin-bottom: 18px; align-self: flex-start; }
   .gaps-content h2 {
-    font-size: clamp(1.9rem, 3.5vw, 2.8rem);
-    font-weight: 800; letter-spacing: -.03em; line-height: 1.15;
-    margin: 14px 0 16px;
+    font-size: clamp(1.9rem, 3.2vw, 2.75rem);
+    font-weight: 800; letter-spacing: -.03em; line-height: 1.12;
+    margin: 0 0 16px;
   }
-  .gaps-content > p { color: var(--muted); margin-bottom: 24px; }
-  .check-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .gaps-content > p {
+    color: var(--muted); margin: 0 0 28px;
+    font-size: 15px; line-height: 1.6; max-width: 520px;
+  }
+  .check-list {
+    display: flex; flex-direction: column; gap: 10px;
+    margin: 0 0 32px;
+  }
   .check-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 14px 18px;
-    border-radius: var(--radius-pill);
+    display: inline-flex; align-items: center; gap: 8px;
+    width: fit-content;
+    max-width: 100%;
+    padding: 4px 16px 4px 8px;
+    border-radius: 999px;
     font-size: 14px; font-weight: 500;
+    color: #fff;
+    background: transparent;
   }
   .check-item .check {
     width: 22px; height: 22px; border-radius: 50%;
     background: #fff; color: #000;
     display: grid; place-items: center; flex-shrink: 0;
   }
-  .check-item .check svg { width: 12px; height: 12px; }
+  .check-item .check svg { width: 11px; height: 11px; }
+  .gaps-content .btn { align-self: flex-start; }
 
   /* ===== SHARED STEPS LAYOUT (Solutions + Process) ===== */
   .steps-list {
@@ -948,7 +989,23 @@
     .steps-track { left: 14px; }
     .steps-num { font-size: 2rem; }
     .steps-card { padding: 22px 18px; }
-    .gaps-media { aspect-ratio: 16/9; border-radius: 20px; }
+    .gaps-card {
+      flex-direction: column;
+      gap: 28px;
+      padding: 16px;
+      border-radius: 24px;
+    }
+    .gaps-media {
+      flex: none;
+      width: 100%;
+      min-height: 280px;
+      aspect-ratio: 4 / 3;
+      border-radius: 18px;
+    }
+    .gaps-content {
+      padding: 8px 8px 16px;
+      max-width: none;
+    }
     .solutions-section { padding: 32px 0 56px; }
     .solutions-track { padding-inline: 16px; gap: 12px; }
     .service-card { width: min(300px, 82vw); min-height: 200px; padding: 26px 22px; }
@@ -1225,24 +1282,24 @@
 <!-- GAPS -->
 <section class="gaps" id="projects">
   <div class="wrap-wide">
-    <div class="gaps-media reveal" data-parallax="0.08">
-      <img src="https://www.tms.com/wp-content/uploads/2024/09/TMS_Event-Solutions-Numerous-People-Attending-Busy-Conference-Listening-to-Guest-Lecture.jpg" alt="Conference transportation challenges" />
-    </div>
-  </div>
-  <div class="wrap">
-    <div class="gaps-content reveal">
-      <span class="pill-badge"><span class="dot"></span> Hidden Mobility Gaps</span>
-      <h2>Feeling Stuck Scaling Your Event?</h2>
-      <p>You’re planning harder than ever, but transportation still feels unpredictable. Overwhelmed by vendor chaos, inefficient routes, and competitors delivering smoother guest journeys?</p>
-      <ul class="check-list">
-        <li class="check-item glass"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> Unclear shuttle strategy leaving attendees stranded</li>
-        <li class="check-item glass"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> Operations eating up your time and contingency budgets</li>
-        <li class="check-item glass"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> Big event days risking costly mobility mistakes</li>
-      </ul>
-      <a class="btn btn-white" href="#contact">
-        Book a Strategy Call
-        <span class="btn-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
-      </a>
+    <div class="gaps-card reveal">
+      <div class="gaps-media">
+        <img src="https://www.tms.com/wp-content/uploads/2024/09/TMS_Event-Solutions-Numerous-People-Attending-Busy-Conference-Listening-to-Guest-Lecture.jpg" alt="Conference transportation challenges" />
+      </div>
+      <div class="gaps-content">
+        <span class="pill-badge"><span class="dot"></span> Hidden Mobility Gaps</span>
+        <h2>Feeling Stuck Scaling Your Event?</h2>
+        <p>You’re planning harder than ever, but transportation still feels unpredictable. Overwhelmed by vendor chaos, inefficient routes, and competitors delivering smoother guest journeys?</p>
+        <ul class="check-list">
+          <li class="check-item"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> Unclear shuttle strategy leaving attendees stranded</li>
+          <li class="check-item"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> Operations eating up your time and contingency budgets</li>
+          <li class="check-item"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> Big event days risking costly mobility mistakes</li>
+        </ul>
+        <a class="btn btn-white" href="#contact">
+          Book a Strategy Call
+          <span class="btn-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -1610,6 +1667,17 @@
     setTimeout(() => { btn.childNodes[0].textContent = old; e.target.reset(); }, 2200);
     return false;
   };
+
+  /* Mouse-follow spotlight (ConsultTitans card hover) */
+  document.querySelectorAll(".glass, .gaps-card").forEach((card) => {
+    card.addEventListener("pointermove", (e) => {
+      const r = card.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      card.style.setProperty("--spot-x", x.toFixed(2) + "%");
+      card.style.setProperty("--spot-y", y.toFixed(2) + "%");
+    });
+  });
 
   /* Horizontal drag scroll — Solutions */
   document.querySelectorAll("[data-hscroll]").forEach((scroller) => {
