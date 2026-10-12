@@ -29,11 +29,13 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
+  html, body { width: 100%; max-width: 100%; }
   body {
     font-family: "Plus Jakarta Sans", system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.55;
+    overflow-x: hidden;
     overflow-x: clip;
     -webkit-font-smoothing: antialiased;
   }
@@ -239,14 +241,15 @@
   .nav-overlay {
     position: fixed; inset: 0; z-index: 1001;
     display: flex; justify-content: center; align-items: flex-start;
-    padding-top: calc(var(--header-h) + 12px);
-    background: transparent;
+    padding: calc(var(--header-h) + 12px) 16px 24px;
+    background: rgba(0,0,0,.45);
     opacity: 0; pointer-events: none;
     transition: opacity .3s ease;
   }
   .nav-overlay.open { opacity: 1; pointer-events: auto; }
   .nav-panel {
-    width: min(280px, calc(100% - 40px));
+    width: min(280px, 100%);
+    margin-inline: auto;
     background: #141414;
     border: 1px solid rgba(255,255,255,.06);
     border-radius: 32px;
@@ -447,7 +450,9 @@
   }
   .trusted-label::after { background: linear-gradient(90deg, var(--line-strong), transparent); }
   .logo-marquee {
-    overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    max-width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
   }
   .logo-track {
     display: flex; gap: 56px; width: max-content;
@@ -534,9 +539,11 @@
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     scrollbar-width: none;
     cursor: grab;
     padding: 8px 0 24px;
+    max-width: 100%;
   }
   .solutions-scroll::-webkit-scrollbar { display: none; }
   .solutions-scroll.is-dragging { cursor: grabbing; user-select: none; }
@@ -692,7 +699,11 @@
   .process-layout .steps-list { max-width: none; margin: 0; }
 
   /* ===== TESTIMONIALS ===== */
-  .testi-track-wrap { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+  .testi-track-wrap {
+    max-width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
   .testi-track {
     display: flex; gap: 16px; width: max-content;
     animation: marquee 40s linear infinite;
@@ -918,20 +929,119 @@
   }
 
   @media (max-width: 900px) {
-    .problem-grid { grid-template-columns: 1fr; }
+    :root { --header-h: 64px; --radius: 22px; }
+    .wrap { width: min(100% - 32px, var(--max)); }
+    .wrap-wide { width: min(100% - 24px, 1200px); }
+    .header-inner { width: min(100% - 32px, 1200px); }
+    .section { padding: 72px 0; }
+    .problem-grid { grid-template-columns: 1fr; gap: 14px; }
     .pricing-grid, .split, .blog-grid, .footer-grid { grid-template-columns: 1fr; }
-    .process-layout { grid-template-columns: 1fr; gap: 32px; }
+    .process-layout { grid-template-columns: 1fr; gap: 28px; }
     .process-sticky {
       position: relative; top: auto;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
+      text-align: center;
     }
-    .steps-item { grid-template-columns: 70px 1fr; }
-    .steps-track { left: 18px; }
-    .gaps-media { aspect-ratio: 16/9; }
+    .process-sticky p { margin-inline: auto; max-width: 420px; }
+    .process-sticky .btn { margin-inline: auto; }
+    .steps-item { grid-template-columns: 56px 1fr; gap: 14px; padding-bottom: 28px; }
+    .steps-track { left: 14px; }
+    .steps-num { font-size: 2rem; }
+    .steps-card { padding: 22px 18px; }
+    .gaps-media { aspect-ratio: 16/9; border-radius: 20px; }
+    .solutions-section { padding: 32px 0 56px; }
+    .solutions-track { padding-inline: 16px; gap: 12px; }
+    .service-card { width: min(300px, 82vw); min-height: 200px; padding: 26px 22px; }
+    .problem-card { min-height: 0; }
+    .problem-visual { min-height: 180px; }
+    .final-cta { padding: 72px 0; }
+    .site-footer { padding: 48px 0 24px; }
   }
   @media (max-width: 640px) {
-    .hero-ctas { flex-direction: column; align-items: center; }
-    .btn { width: min(100%, 320px); justify-content: space-between; }
+    .wrap { width: min(100% - 28px, var(--max)); }
+    .wrap-wide { width: min(100% - 20px, 1200px); }
+    .header-inner { width: min(100% - 28px, 1200px); }
+    .hero { padding: calc(var(--header-h) + 28px) 0 40px; }
+    .hero h1 { font-size: clamp(1.85rem, 8.2vw, 2.35rem); margin-bottom: 16px; }
+    .hero-lead { font-size: 14px; margin-bottom: 24px; padding: 0 4px; }
+    .social-proof {
+      flex-wrap: wrap; justify-content: center; gap: 10px;
+      margin-bottom: 22px; padding: 0 8px;
+    }
+    .social-proof span { font-size: 10px; letter-spacing: .08em; text-align: center; }
+    .hero-ctas {
+      flex-direction: column; align-items: stretch;
+      width: 100%; max-width: 340px; margin-inline: auto;
+      margin-bottom: 36px; gap: 10px;
+    }
+    .hero-ctas .btn {
+      width: 100%; justify-content: space-between;
+    }
+    .hero-media { border-radius: 20px; aspect-ratio: 16 / 10; }
+    .play-btn { width: 56px; height: 56px; }
+    .section-head { margin-bottom: 32px; }
+    .section-head h2 { font-size: clamp(1.6rem, 7vw, 2.1rem); }
+    .process-sticky h2,
+    .solutions-head h2,
+    .gaps-content h2,
+    .final-cta h2 {
+      font-size: clamp(1.6rem, 7vw, 2.1rem);
+    }
+    .process-sticky .btn,
+    .gaps-content .btn,
+    .final-cta .btn {
+      width: min(100%, 320px);
+      justify-content: space-between;
+    }
+    /* Process steps: number above card for readable width */
+    .steps-item {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding-bottom: 24px;
+      padding-left: 22px;
+    }
+    .steps-track { left: 6px; top: 8px; bottom: 8px; width: 2px; }
+    .steps-num { font-size: 1.65rem; line-height: 1; }
+    .steps-card { padding: 20px 16px; border-radius: 18px; }
+    .steps-card h3 { font-size: 1.15rem; }
+    .check-item {
+      align-items: flex-start;
+      padding: 12px 14px;
+      font-size: 13px;
+      white-space: normal;
+      border-radius: 18px;
+    }
+    .solutions-head { margin-bottom: 28px; padding: 0 14px; }
+    .solutions-track { padding-inline: 14px; }
+    .service-card { width: min(280px, 78vw); scroll-snap-align: start; }
+    .solutions-scroll { scroll-snap-type: x mandatory; padding-bottom: 12px; }
+    .logo-track { gap: 36px; }
+    .logo-track span { font-size: 13px; }
+    .testi-card { width: min(300px, 82vw); padding: 22px; }
+    .price-card { padding: 22px 18px; }
+    .price-card .btn { white-space: normal; height: auto; }
+    .faq-q { font-size: 14px; padding: 16px 14px; gap: 12px; }
+    .contact-card { padding: 22px 18px; border-radius: 20px; }
+    .blog-card { border-radius: 20px; }
+    .final-meta { gap: 12px 16px; }
+    .footer-grid { gap: 28px; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .btn { max-width: 100%; }
+    .nav-panel { width: min(260px, calc(100% - 32px)); }
+    .modal { padding: 16px; }
+    .modal-close { top: -36px; font-size: 12px; }
+  }
+  @media (max-width: 400px) {
+    .hero h1 { font-size: 1.7rem; }
+    .hero-ctas .btn,
+    .process-sticky .btn,
+    .gaps-content .btn,
+    .final-cta .btn {
+      font-size: 13px;
+      padding: 8px 8px 8px 16px;
+      gap: 8px;
+    }
+    .btn-arrow { width: 30px; height: 30px; }
   }
 </style>
 </head>
